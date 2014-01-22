@@ -47,7 +47,7 @@ class DataTables:
 
     :param request: request containing the GET values, specified by the 
     datatable for filtering, sorting and paging
-    :type request: pyramid.request
+    :type request: flask.request
     :param sqla_object: your SQLAlchemy table object
     :type sqla_object: sqlalchemy.ext.declarative.DeclarativeMeta
     :param query: the query wanted to be seen in the the table
@@ -60,7 +60,7 @@ class DataTables:
     def __init__(self, request, sqla_object, query, columns):
         """Initializes the object with the attributes needed, and runs the query
         """
-        self.request_values = request.GET
+        self.request_values = request.args
         self.sqla_object = sqla_object
         self.query = query
         self.columns = columns
