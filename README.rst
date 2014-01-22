@@ -13,7 +13,7 @@ The package is available on `PyPI <https://pypi.python.org/pypi/sqlalchemy-datat
 
 .. code-block:: bash
 
-    pip install sqlalchemy-datatables
+    pip install https://github.com/yoyicue/sqlalchemy-datatables/zipball/master
 
 
 A simple example
@@ -59,11 +59,12 @@ A simple example
         else:
             return chain
 
-    @view_config(route_name='home', renderer='templates/home.pt')
+    @app.route("/home")
     def home(request):
-        return {'project': 'test-project'}
+        return render_template('home.html', project='test-project')
 
-    @view_config(route_name='simple_example', request_method='GET', renderer='json')
+    
+    @app.route("/simple_example")
     def simple_example(request):
         # defining columns
         columns = []
@@ -79,10 +80,10 @@ A simple example
         rowTable = DataTables(request, User, query, columns) 
 
         # returns what is needed by DataTable 
-        return rowTable.output_result()
+        return jsonify(**rowTable.output_result())
 
 
-**templates/home.pt**
+**templates/home.html**
 
 .. code-block:: html
 
@@ -104,29 +105,11 @@ A simple example
             $('#simple-example').dataTable({
                 "bProcessing": true,
                 "bServerSide": true,
-                "sAjaxSource": "${request.route_path('simple_example')}"
+                "sAjaxSource": "{{ url_for('simple_example') }}"
             });
         });
     </script>
 
-
-Testing the Pyramid based ''test-project''
-------------------------------------------
-
-.. code-block:: bash
-
-    $ git clone 
-    $ virtualenv --no-site-packages sqlalchemy-datatables
-    $ cd sqlalchemy-datatables/
-    Once only: 
-    $ bin/python setup.py develop
-
-    $ cd test-project/
-    $ $venv/bin/python setup.py develop
-    $ $venv/bin/initialize_test-project_db development.ini
-    $ $venv/bin/pserve development.ini
-
-    Open a web browser and got to the url localhost:6543
 
 
 Changelog
